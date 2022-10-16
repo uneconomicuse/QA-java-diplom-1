@@ -1,49 +1,56 @@
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.runners.Parameterized;
 import praktikum.Ingredient;
 import praktikum.IngredientType;
 
 import static org.junit.Assert.assertEquals;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(Parameterized.class)
 public class IngredientTest {
 
-    private String name = "test sauce";
-    private float price = 100;
+    private final String name;
+    private final float price;
+    private final IngredientType type;
 
-    @Mock
-    Ingredient ingredient;
-    IngredientType ingredientType;
+    public IngredientTest(IngredientType type, String name, float price) {
+        this.type = type;
+        this.name = name;
+        this.price = price;
+    }
 
-    @Before
-    public void setup() {
-        ingredient = new Ingredient(ingredientType.SAUCE, name, price);
+    @Parameterized.Parameters
+    public static Object[][] getTestData() {
+        return new Object[][] {
+
+                {IngredientType.SAUCE, "hot sauce", 100},
+                {IngredientType.SAUCE, "sour cream", 200},
+                {IngredientType.SAUCE, "chili sauce", 300},
+
+                {IngredientType.FILLING, "cutlet", 100},
+                {IngredientType.FILLING, "dinosaur", 200},
+                {IngredientType.FILLING, "sausage", 300}
+        };
     }
 
     @Test
-    public void checkPrice() {
-        float actual = ingredient.getPrice();
-        float expected = 100;
-
-        assertEquals(expected, actual, 0);
+    public void getPriceIngredient() {
+        Ingredient ingredient = new Ingredient(type, name, price);
+        float actualPrice = ingredient.getPrice();
+        assertEquals(price, actualPrice, 0);
     }
 
     @Test
-    public void checkName() {
-        String actual = ingredient.getName();
-        String expected = "test sauce";
-
-        assertEquals(expected, actual);
+    public void getNameIngredient() {
+        Ingredient ingredient = new Ingredient(type, name, price);
+        String actualName = ingredient.getName();
+        assertEquals(name, actualName);
     }
 
     @Test
-    public void checkType() {
-        String actual = String.valueOf(ingredient.getType());
-        String expected = "SAUCE";
-
-        assertEquals(expected, actual);
+    public void getTypeIngredient() {
+        Ingredient ingredient = new Ingredient(type, name, price);
+        IngredientType actualType = ingredient.getType();
+        assertEquals(type, actualType);
     }
 }
