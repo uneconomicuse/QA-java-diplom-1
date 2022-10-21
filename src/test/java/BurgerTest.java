@@ -1,9 +1,13 @@
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+
 import praktikum.Bun;
 import praktikum.Burger;
+
 import praktikum.Ingredient;
 import praktikum.IngredientType;
 
@@ -19,14 +23,21 @@ public class BurgerTest {
 
     @Mock
     Bun bun;
+    @Mock
     Ingredient ingredient;
     IngredientType type;
 
+    @Before
+    public void setup() {
+        Mockito.when(bun.getPrice()).thenReturn(bunPrice);
+        Mockito.when(bun.getName()).thenReturn(bunName);
+        Mockito.when(ingredient.getName()).thenReturn(sauceName);
+        Mockito.when(ingredient.getPrice()).thenReturn(ingredientPrice);
+        Mockito.when(ingredient.getType()).thenReturn(type.SAUCE);
+    }
+
     @Test
     public void checkRemoveIngredient() {
-        bun = new Bun(bunName, bunPrice);
-        ingredient = new Ingredient(type.SAUCE, sauceName, ingredientPrice);
-
         Burger burger = new Burger();
         burger.setBuns(bun);
         for (int i = 0; i <= 2; i++) {
@@ -43,9 +54,6 @@ public class BurgerTest {
 
     @Test
     public void checkBurgerGetPrice() {
-        bun = new Bun(bunName, bunPrice);
-        ingredient = new Ingredient(type.SAUCE, sauceName, ingredientPrice);
-
         Burger burger = new Burger();
         burger.setBuns(bun);
         burger.addIngredient(ingredient);
@@ -53,15 +61,11 @@ public class BurgerTest {
         float actual = burger.getPrice();
         float expected = bun.getPrice() * 2 + ingredient.getPrice();
 
-        System.out.println("Цена за бургер: " + actual + ", " + "Цена за ингредиенты: " + expected);
         assertEquals(expected, actual, 0);
     }
 
     @Test
     public void checkBurgerGetReceipt() {
-        bun = new Bun(bunName, bunPrice);
-        ingredient = new Ingredient(type.SAUCE, sauceName, ingredientPrice);
-
         Burger burger = new Burger();
         burger.setBuns(bun);
         burger.addIngredient(ingredient);
@@ -70,10 +74,8 @@ public class BurgerTest {
 
         boolean bunAssert = burger.getReceipt().contains(bunName);
         boolean sauceAssert = burger.getReceipt().contains(sauceName);
-        int notNull = burger.getReceipt().length();
 
         assertTrue(bunAssert);
         assertTrue(sauceAssert);
-        assertNotNull(notNull);
     }
 }
